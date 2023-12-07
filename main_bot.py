@@ -1,6 +1,3 @@
-#После добавления меню
-#Указать про запятую в десятичных дрбоях
-
 import full_task_bd
 from all_kyes import bot, dp, storage
 import aiogram.dispatcher.filters
