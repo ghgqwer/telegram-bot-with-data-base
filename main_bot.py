@@ -26,30 +26,6 @@ start_users_bd()
 
 Count_of_types = 12  #const
 
-# def types_of_ege(Count_of_types):
-#     sdamgia = SdamGIA()
-#     catalog = sdamgia.get_catalog('math')
-#     list_of_types_ege = {}
-#     for i in range(Count_of_types+1):
-#         list_of_types_ege[catalog[i]['topic_id']] = sdamgia.get_catalog('math')[i]['topic_name']
-#     print(list_of_types_ege)
-#     return list_of_types_ege
-#        #print(sdamgia.get_catalog('math')[i]['topic_name'])
-#
-# types_of_ege(Count_of_types)
-
-
-
-
-#types_of_ege(Count_of_types)
-
-# sdamgia = SdamGIA()
-# list_of_type_ege = {}
-# for i in range(Count_of_types):
-#     list_of_type_ege[sdamgia.get_catalog('math')[i]['topic_id']] = sdamgia.get_catalog('math')[i]['topic_name']
-#
-# print(list_of_type_ege)
-
 len_task = 1 #const
 correct_answer =['Отлично', 'Превосходно', 'Великолепно', 'Потрясающе', 'Замечательно', 'Правильно', 'Молодец',
                  'Умница', 'Точно', 'Правильный ответ', 'Здорово', 'Браво', 'Фантастика', 'Супер', 'Восхитительно']
@@ -85,7 +61,6 @@ async def commands_start(message: types.Message):
 @dp.callback_query_handler(Text(['Погнали', 'Меню', 'Back_to_menu']))
 @dp.message_handler(Text(['Погнали', 'Меню', 'Назад'], ignore_case=True))
 async def bot_go(message: types.Message):
-    #await bot.delete_message(chat_id=sent_message.chat.id, message_id=sent_message.message_id)
     await bot.send_message(message.from_user.id, '🤖', reply_markup=ReplyKeyboardMarkup(resize_keyboard=True,
                                                                 one_time_keyboard=True).add(KeyboardButton(f'Первый '
                                                                                                          f'режим'),
@@ -129,7 +104,7 @@ async def First_mode_game(callback_query: types.CallbackQuery):
                                                                                         callback_data='Back_to_menu')
                                                                    ))
 
-#len_task
+
 count_of_true_answers = 0
 numb_of_type = 1
 flag_to_timer = 0
@@ -171,15 +146,12 @@ async def load_answer_first_game_mode(message: types.Message, state: FSMContext)
     if answer == true_answer:
         count_of_true_answers += 1
         await bot.send_message(message.from_user.id, '👏')
-        await bot.send_message(message.from_user.id, text=random.choice(correct_answer))#, f'Отправь мне ответ на это задание'
+        await bot.send_message(message.from_user.id, text=random.choice(correct_answer))
     else:
         await bot.send_message(message.from_user.id, '😔')
         await bot.send_message(message.from_user.id, text=random.choice(incorrect_feedback_words))
     await state.finish()
     await First_mode_game_start(message)
-
-
-
 
 
 
@@ -222,22 +194,12 @@ async def Second_mode_type(message: types.Message):
     buttons = []
     for option in list_of_type_ege.keys():
         buttons.append(KeyboardButton(option))
-    #print(buttons)
+
     await bot.send_message(message.from_user.id, f'Какого типа задание будешь решать?\n\n{message_with_types}',
                            reply_markup=ReplyKeyboardMarkup(resize_keyboard=True).add(
                                *buttons))
     await FSMsecond_mode.Type_of_task.set()
 
-# @dp.message_handler(commands=['Start_second_mode'])
-# @dp.callback_query_handler(Text('Start_second_mode'))
-# @dp.message_handler(Text('Готов', ignore_case=True))
-# async def Second_mode_type(message: types.Message):
-#     global Trys, Count_true_ans_second_mode
-#     Trys = 0
-#     Count_true_ans_second_mode = 0
-#     await bot.send_message(message.from_user.id, 'Какого типа задание будешь решать?',
-#                            reply_markup=ReplyKeyboardRemove())
-#     await FSMsecond_mode.Type_of_task.set()
 
 @dp.message_handler(state=FSMsecond_mode.Type_of_task)
 async def load_type_second_game_mode(message: types.Message, state: FSMContext):
@@ -326,7 +288,7 @@ async def third_mode_game_start(message: types.Message):
         true_answer = await third_mode_type_exercise(message, numb_of_type)
         await FSMthird_mode.Answer.set()
         numb_of_type += 1
-    elif lst_of_user_task.count(f'{message.from_user.id}') >= Attempts:#number_of_attempts >= Attempts or
+    elif lst_of_user_task.count(f'{message.from_user.id}') >= Attempts:
         await bot.send_message(message.from_user.id, 'У тебя больше не осталось попыток(')
     else:
         end = timer()
@@ -341,8 +303,7 @@ async def third_mode_game_start(message: types.Message):
                                                          f"правильных ответов из {len_task}.\nТы затратил "
                                                          f"{time_result(all_time)}",
                                    reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('Поробовать еще '
-                                                                                                'раз', callback_data='Start_third_mode')))#,
-            # reply_markup=ReplyKeyboardRemove()
+                                                                                                'раз', callback_data='Start_third_mode')))
         else:
             await bot.send_message(message.from_user.id, '✅', reply_markup=ReplyKeyboardMarkup(
                 resize_keyboard=True).add('Меню'))
@@ -364,7 +325,7 @@ async def load_answer_first_game_mode(message: types.Message, state: FSMContext)
     if answer == true_answer:
         count_of_true_answers += 1
         await bot.send_message(message.from_user.id, '👏')
-        await bot.send_message(message.from_user.id, text=random.choice(correct_answer))#, f'Отправь мне ответ на это задание'
+        await bot.send_message(message.from_user.id, text=random.choice(correct_answer))
     else:
         await bot.send_message(message.from_user.id, '😔')
         await bot.send_message(message.from_user.id, text=random.choice(incorrect_feedback_words))
@@ -401,11 +362,6 @@ async def count_users(message: types.Message):
         await bot.send_message(message.from_user.id, f'Количество пользователей бота: {len(users)}')
 
 
-
-# if check_result(message, message.from_user.id):
-#     await check_result(message, message.from_user.id)
-# else:
-#     await bot.send_message(message.from_user.id, 'Результатов не найдено')
 #-------------------------Админ-----------------------------
 ID = None
 
@@ -426,7 +382,6 @@ class FSMadmin(StatesGroup):
     photo = State()
     answer = State()
 @dp.message_handler(commands=['moderator'], is_chat_admin = True)
-#@dp.message_handler(commands=['moderator'])  #исправить
 async def make_change_commands(message: types.Message):
     global ID
     ID = message.from_user.id
@@ -447,7 +402,7 @@ async def cm_start(message: types.Message):
 #Отмена (выход из машинного состояния)
 @dp.message_handler(commands='отмена', state='*')
 @dp.callback_query_handler(Text('cancel'))
-@dp.message_handler(Text('отмена', ignore_case=True), state='*')#, state='*'
+@dp.message_handler(Text('отмена', ignore_case=True), state='*')
 async def cansel_handler(message : types.Message, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
@@ -456,18 +411,16 @@ async def cansel_handler(message : types.Message, state: FSMContext):
     await message.reply('Ok', reply_markup=button_case_admin)
 
 
-#Ловим ответ от пользователя и вносим в словарь
 @dp.message_handler(state=FSMadmin.type)
 async def load_photo(message : types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['type'] = message.text
     await FSMadmin.next()
-    #await message.reply('Введи тип задание')
     await message.reply('Загрузите фото с заданием', reply_markup=ReplyKeyboardMarkup(resize_keyboard=True,
                                                                                   one_time_keyboard = True).add(
             KeyboardButton('Отмена')))
 
-# Ловим второй ответ
+
 @dp.message_handler(content_types=['photo'], state=FSMadmin.photo)
 async def load_type(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
@@ -483,8 +436,6 @@ async def load_answer(message: types.Message, state : FSMContext):
         data['answer'] = message.text
     await sql_add_command(state)
     await bot.send_message(message.from_user.id, text='Готово', reply_markup=button_case_admin)
-    # async with state.proxy() as data:
-    #     await message.reply(str(data))
     await state.finish()
 
 
@@ -514,9 +465,6 @@ async def all_sql_to_del(callback_query: types.CallbackQuery):
                              reply_markup=InlineKeyboardMarkup().add(
             InlineKeyboardButton(f'Удалить', callback_data=f'del {ret[0]}')))
         await bot.send_message(callback_query.from_user.id, '➖➖➖➖➖')
-        # await bot.send_photo(callback_query.from_user.id, ret[1], f'Тип: {ret[2]}\nОтвет: {ret[-1]}')
-        # await bot.send_message(callback_query.from_user.id, text='^^^', reply_markup=InlineKeyboardMarkup().add(
-        #     InlineKeyboardButton(f'Удалить', callback_data=f'del {ret[0]}')))
 
 @dp.callback_query_handler(Text('type_sql_to_del'))
 async def what_type_to_del(callback_query: types.CallbackQuery):
@@ -646,7 +594,6 @@ async def process_len_task(message: types.Message, state: FSMContext):
         await bot.send_message(message.from_user.id,f'Тест не может состоять из {len_task} заданий')
         await state.finish()
     else:
-        #await state.finish()
         await FSMadmin.next()
         await bot.send_message(message.from_user.id,'Сколько попыток будет на решение варианта')
         await FSMfull_test.Attempts.set()
@@ -655,13 +602,11 @@ async def process_len_task(message: types.Message, state: FSMContext):
 async def process_len_task(message: types.Message, state: FSMContext):
     global Attempts
     Attempts = int(message.text)
-    #print(Attempts)
     if Attempts <= 0:
         await bot.send_message(message.from_user.id,f'В тесте не может быть {Attempts} попыток')
         await state.finish()
         number_of_attempts = 0
     else:
-    #await state.finish()
         await process_len_task(message)
 
 @dp.message_handler(Text('', ignore_case=True), state='*')
@@ -726,21 +671,6 @@ def time_result(k):
     second = int(k) #second
     return f'{str(minut)} мин, {str(second)} сек'
 
-# def types_of_ege():
-#     url = 'https://ege.sdamgia.ru/newapi/general'
-#     headers = {
-#         'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, '
-#                       'like Gecko) Chrome/114.0.0.0Mobile Safari/537.36',
-#         'Accept - Ranges': 'bytes'
-#     }
-#     list_of_types_ege = {}
-#     response = requests.get(url, headers=headers).json()
-#     for data in response['constructor']:
-#         if data['type'] == 'short':
-#             list_of_types_ege[data['num']] = data['title']
-#     return list_of_types_ege
-
-
 def types_of_ege(Count_of_types, catalog_cache=None):
     if catalog_cache is None:
         sdamgia = SdamGIA()
@@ -750,7 +680,6 @@ def types_of_ege(Count_of_types, catalog_cache=None):
     list_of_types_ege = {}
     for i in range(Count_of_types):
         list_of_types_ege[catalog[i]['topic_id']] = catalog[i]['topic_name']
-    #print(list_of_types_ege)
     return list_of_types_ege
 
 def all_types_of_ege(catalog_cache=None):
@@ -761,11 +690,8 @@ def all_types_of_ege(catalog_cache=None):
         catalog = catalog_cache
     count_of_all_types = 0
     while catalog[count_of_all_types]['topic_id'].isdigit():
-        #print(catalog[count_of_all_types])
         count_of_all_types += 1
     return count_of_all_types
-
-
 
 
 @dp.message_handler()
